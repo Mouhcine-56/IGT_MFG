@@ -43,4 +43,6 @@ This code includes:
 HIGH-DIMENSIONAL OPTIMAL CONTROL AND FIRST-ORDER MEAN FIELD
 GAMES](https://arxiv.org/pdf/2507.15126)**
 
+## Contact
 
+If you have any questions, suggestions, or feedback,  feel free to contact me at [mouhcine.assouli@unilim.fr](mailto:mouhcine.assouli@unilim.fr) — I'm happy to help!
