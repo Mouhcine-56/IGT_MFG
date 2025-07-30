@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-We first use neural networks to obtain a rough approximation of the value function, which serves as an initial guess for solving the two-point boundary value problem, derived from Pontryagin’s maximum principle, and generating accurate data. The network is then trained using a loss function that incorporates this dataset and penalize deviations from the Hamilton-Jacobi-Bellman (HJB) equation.
+We use neural networks to obtain a rough approximation of the value function, which serves as an initial guess for solving the two-point boundary value problem derived from Pontryagin’s maximum principle, and subsequently generates accurate data. The network is then trained using a loss function that incorporates this dataset and penalizes deviations from the Hamilton-Jacobi-Bellman (HJB) equation.
 
 This code includes:
 - Initialization "HJB solver" using DGM or C-DGM
