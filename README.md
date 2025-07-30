@@ -8,7 +8,7 @@ This code includes:
 - Initialization "HJB solver" using DGM or C-DGM
 - Data generation using TPBVP solvers
 - Value function training
-- 
+
 ## 🔧 Structure
 
 - `main.py` — Training and evaluation pipeline
