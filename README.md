@@ -36,7 +36,7 @@ This code includes:
 - `src/solve.py` — Functions for Training routines, HJB, TPBVP, and generator
 - `src/problem/prb.py` — problem definitions (Hamiltonian, dynamics, costs, etc...)
 
-## 📄 Paper
+## 📄 Article
 
 📝 If you're interested in the full theoretical and experimental details, please see our paper:  
 **[INITIALIZATION-DRIVEN NEURAL GENERATION AND TRAINING FOR
