@@ -7,7 +7,7 @@ import copy
 from scipy.stats import ks_2samp
 import torch.nn as nn
 from scipy.stats import wasserstein_distance
-#from geomloss import SamplesLoss
+from geomloss import SamplesLoss
 
 #================================ DGM_HJB =========================================#
 
@@ -138,6 +138,52 @@ def Approximate_v(an, V_NN, data, num_epoch, t, lr, num_samples, Round, device):
                   f"Loss_total = {Loss_total.item():.4e}")
 
     print('\n')
+    return V_NN
+
+def Approximate_v2(an, V_NN, data, num_epoch, t, lr, num_samples, Round, device):
+    """
+    Train the value function network V_NN using supervised learning only,
+    based on value and gradient targets (no HJB residual) to compute V(0,.)
+
+    This is typically used for V2 (second value function for exploitability).
+
+    Args:
+        an          : Analytic problem instance
+        V_NN        : Neural network for V(t,x)
+        data        : Dictionary with keys 't', 'X', 'V', 'A'
+        num_epoch   : Number of training epochs
+        t           : Time grid (unused here but required for compatibility)
+        lr          : Learning rate
+        num_samples : Unused (kept for compatibility)
+        Round       : Round index (for logging/debugging)
+        device      : torch device
+
+    Returns:
+        V_NN        : Trained value network
+    """
+    V_NN.train()
+    optimizer = optim.Adam(V_NN.parameters(), lr)
+
+    for epoch in range(num_epoch + 1):
+        # Supervised loss on value and gradient
+        Loss_v = torch.mean((V_NN(data['t'], data['X']) - data['V']) ** 2)
+        Loss_v_x = torch.mean((V_NN.get_grad(data['t'], data['X']) - data['A']) ** 2)
+
+        Loss_total = Loss_v + Loss_v_x
+
+        # Backpropagation
+        optimizer.zero_grad()
+        Loss_total.backward()
+        optimizer.step()
+
+        # Logging every 1000 epochs
+        if epoch % 1000 == 0:
+            print(f"Iteration {epoch:5d}: "
+                  f"Loss_V = {Loss_v.item():.4e}, "
+                  f"Loss_V_x = {Loss_v_x.item():.4e}, "
+                  f"Loss_total = {Loss_total.item():.4e}")
+
+    print()
     return V_NN
 
 #================================ solve BVP ===========================================#

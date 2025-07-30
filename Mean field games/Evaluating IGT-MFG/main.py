@@ -117,6 +117,8 @@ def test(V_NN, num_points, dim, T, mu):
 def W_gem(an, G_history, G_k, x0_ini, m0, t_grid):
     W_k = wasserstein_fp(an, G_history, G_k, x0_ini, m0, t_grid, p=1, blur=0.5, device=device)
     print(f"k {an.n:2d} │ L1={np.linalg.norm(W_k,1):.3e} │ L2={np.linalg.norm(W_k,2):.3e} │ L∞={W_k.max():.3e}")
+    
+    return W_k.max()
 
 
 # ==========================
@@ -143,15 +145,27 @@ if __name__ == "__main__":
     t = torch.linspace(args.t0, args.t_final, args.num_samples_hjb, device=device).unsqueeze(1)
     t_g = torch.linspace(args.t0, args.t_final, args.num_samples_gen, device=device).unsqueeze(1)
     tt = torch.linspace(args.t0, args.t_final, 21, device=device).unsqueeze(1)
+    
+    tol = 1e-6
+    Delta = 1+tol
 
     for Round in range(args.Max_Round):
+    
+        if Delta <= tol:
+            break
+
         print(f'\n===== Round {Round} =====\n')
         G_NN_list = []
+        delta = 1 + tol
         if Round != 0:
             G_NN_list.append(copy.deepcopy(G_NN_new))
 
         nmax = 20
         for n in range(nmax):
+        
+            if delta <= tol:
+                break
+
             print(f"\n--- Best Response {n} ---\n")
             start_time = time.time()
 
@@ -176,7 +190,7 @@ if __name__ == "__main__":
 
             # Phase 6: Evaluate
             test(V_NN, args.num_points_test, args.dim, T=1, mu=0.1)
-            W_gem(an, G_NN_list, G_NN_new, x0_ini, m0, tt)
+            delta = W_gem(an, G_NN_list, G_NN_new, x0_ini, m0, tt)
 
             # Save generator and update list
             G_NN_list.append(copy.deepcopy(G_NN_new))
@@ -197,4 +211,6 @@ if __name__ == "__main__":
             print(f"Exploitability: {exploi:.4e}")
 
             G_NN = copy.deepcopy(G_NN_new)
+            
+        Delta = delta
 

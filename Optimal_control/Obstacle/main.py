@@ -45,7 +45,7 @@ def get_args():
     parser.add_argument('--num_samples_hjb', type=int, default=1)
     parser.add_argument('--num_samples_bvp', type=int, default=32)
     parser.add_argument('--num_points_test', type=int, default=1000)
-    parser.add_argument('--Max_Round', type=int, default=2)
+    parser.add_argument('--Max_Round', type=int, default=3)
     parser.add_argument('--num_epoch', type=int, default=100)
     parser.add_argument('--num_itr', type=int, default=10000)
     parser.add_argument('--freq', type=int, default=1000)

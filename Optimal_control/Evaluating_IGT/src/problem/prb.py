@@ -8,7 +8,7 @@ class Analytic(object):
     Defines dynamics, costs, Hamiltonian,  and value function.
     """
     def __init__(self, device):
-        self.dim = 1                   # Dimension of state space
+        self.dim = 2                   # Dimension of state space
         self.TT = 1                    # Final time
         self.X0_ub = 1                 # Upper bound for initial state sampling
         self.X0_lb = -self.X0_ub       # Lower bound for initial state sampling
